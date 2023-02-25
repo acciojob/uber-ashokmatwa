@@ -74,6 +74,8 @@ public class CustomerServiceImpl implements CustomerService {
 				driverRepository2.save(driver);  // cascade --> tripbooking
 				customerRepository2.save(customer); // cascade --> tripbooking
 
+				tripBookingRepository2.save(tripBooking);
+
 				return tripBooking;
 			}
 		}
@@ -91,18 +93,21 @@ public class CustomerServiceImpl implements CustomerService {
 		tripBooking.setBill(0);
 		tripBooking.setDistanceInKm(0);
 
+		tripBooking.getDriver().getCab().setAvailable(true);
+		tripBookingRepository2.save(tripBooking);
+
 //		tripBooking.setDriver(null);
 //		tripBooking.setCustomer(null);
 //		tripBooking.setToLocation(null);
 //		tripBooking.setFromLocation(null);
 
-		driver.getTripBookingList().remove(tripBooking);
-		driver.getCab().setAvailable(true);
-		customer.getTripBookingList().remove(tripBooking);
-
-		//cascade
-		driverRepository2.save(driver);
-		customerRepository2.save(customer);
+//		driver.getTripBookingList().remove(tripBooking);
+//		driver.getCab().setAvailable(true);
+//		customer.getTripBookingList().remove(tripBooking);
+//
+//		//cascade
+//		driverRepository2.save(driver);
+//		customerRepository2.save(customer);
 	}
 
 	@Override
@@ -110,13 +115,14 @@ public class CustomerServiceImpl implements CustomerService {
 		//Complete the trip having given trip Id and update TripBooking attributes accordingly
 
 		TripBooking tripBooking = tripBookingRepository2.findById(tripId).get();
-		Driver driver = tripBooking.getDriver();
-		Customer customer = tripBooking.getCustomer();
+//		Driver driver = tripBooking.getDriver();
+//		Customer customer = tripBooking.getCustomer();
 
 		tripBooking.setStatus(TripStatus.COMPLETED);
+		tripBooking.getDriver().getCab().setAvailable(true);
+		tripBookingRepository2.save(tripBooking);
 
-		driver.getCab().setAvailable(true);
-
-		driverRepository2.save(driver);//cascade --> cab, tripbookin
+//		driver.getCab().setAvailable(true);
+//		driverRepository2.save(driver);//cascade --> cab, tripbookin
 	}
 }
