@@ -9,7 +9,6 @@ import com.driver.repository.CustomerRepository;
 import com.driver.repository.DriverRepository;
 import com.driver.repository.TripBookingRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -53,12 +52,12 @@ public class CustomerServiceImpl implements CustomerService {
 		List<Driver> driverList = driverRepository2.findAll();
 		for(Driver driver : driverList){
 			Cab cab = driver.getCab();
-			if(cab.isAvailable()){
+			if(cab.getAvailable()){
 				TripBooking tripBooking = new TripBooking();
 				tripBooking.setFromLocation(fromLocation);
 				tripBooking.setToLocation(toLocation);
 				tripBooking.setDistanceInKm(distanceInKm);
-				tripBooking.setTripStatus(TripStatus.CONFIRMED);
+				tripBooking.setStatus(TripStatus.CONFIRMED);
 				int bill = cab.getPerKmRate() * distanceInKm;
 				tripBooking.setBill(bill);
 
@@ -88,7 +87,7 @@ public class CustomerServiceImpl implements CustomerService {
 		Driver driver = tripBooking.getDriver();
 		Customer customer = tripBooking.getCustomer();
 
-		tripBooking.setTripStatus(TripStatus.CANCELED);
+		tripBooking.setStatus(TripStatus.CANCELED);
 		tripBooking.setBill(0);
 		tripBooking.setDistanceInKm(0);
 
@@ -114,7 +113,7 @@ public class CustomerServiceImpl implements CustomerService {
 		Driver driver = tripBooking.getDriver();
 		Customer customer = tripBooking.getCustomer();
 
-		tripBooking.setTripStatus(TripStatus.COMPLETED);
+		tripBooking.setStatus(TripStatus.COMPLETED);
 
 		driver.getCab().setAvailable(true);
 
