@@ -48,7 +48,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 		//customer --> tripbooking
 		//driver --? tripbooking
-
 		List<Driver> driverList = driverRepository2.findAll();
 		for(Driver driver : driverList){
 			Cab cab = driver.getCab();
@@ -71,10 +70,11 @@ public class CustomerServiceImpl implements CustomerService {
 				tripBooking.setCustomer(customer);
 				tripBooking.setDriver(driver);
 
+				//trip will not saved twice because of primary key
 				driverRepository2.save(driver);  // cascade --> tripbooking
 				customerRepository2.save(customer); // cascade --> tripbooking
 
-				tripBookingRepository2.save(tripBooking);
+//				tripBookingRepository2.save(tripBooking);
 
 				return tripBooking;
 			}
